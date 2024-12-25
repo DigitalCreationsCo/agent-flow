@@ -3052,7 +3052,6 @@
                 "required_inputs": [
                   "api_endpoint",
                   "collection_name",
-                  "collection_name_new",
                   "token"
                 ],
                 "selected": "Data",
@@ -3163,7 +3162,7 @@
               },
               "collection_name_new": {
                 "_input_type": "StrInput",
-                "advanced": false,
+                "advanced": true,
                 "display_name": "Collection Name",
                 "dynamic": false,
                 "info": "Name of the new collection to create.",
@@ -3171,7 +3170,7 @@
                 "load_from_db": false,
                 "name": "collection_name_new",
                 "placeholder": "",
-                "required": true,
+                "required": false,
                 "show": true,
                 "title_case": false,
                 "trace_as_metadata": true,
@@ -3453,7 +3452,6 @@
                 "required_inputs": [
                   "api_endpoint",
                   "collection_name",
-                  "collection_name_new",
                   "token"
                 ],
                 "selected": "Data",
@@ -3564,7 +3562,7 @@
               },
               "collection_name_new": {
                 "_input_type": "StrInput",
-                "advanced": false,
+                "advanced": true,
                 "display_name": "Collection Name",
                 "dynamic": false,
                 "info": "Name of the new collection to create.",
@@ -3572,7 +3570,7 @@
                 "load_from_db": false,
                 "name": "collection_name_new",
                 "placeholder": "",
-                "required": true,
+                "required": false,
                 "show": true,
                 "title_case": false,
                 "trace_as_metadata": true,

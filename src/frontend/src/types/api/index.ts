@@ -176,6 +176,7 @@ export type Users = {
   profile_image: string;
   create_at: Date;
   updated_at: Date;
+  subscription_id: string;
 };
 
 export type Component = {

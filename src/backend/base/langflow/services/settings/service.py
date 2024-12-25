@@ -18,6 +18,7 @@ class SettingsService(Service):
         # Check if a string is a valid path or a file name
 
         settings = Settings()
+
         if not settings.config_dir:
             msg = "CONFIG_DIR must be set in settings"
             raise ValueError(msg)

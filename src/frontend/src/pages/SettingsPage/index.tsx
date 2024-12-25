@@ -74,6 +74,16 @@ export default function SettingsPage(): JSX.Element {
         />
       ),
     },
+    {
+      title: "Billing",
+      href: "/settings/billing",
+      icon: (
+        <ForwardedIconComponent
+          name="CreditCard"
+          className="w-4 flex-shrink-0 justify-start stroke-[1.5]"
+        />
+      ),
+    },
   );
   return (
     <PageLayout

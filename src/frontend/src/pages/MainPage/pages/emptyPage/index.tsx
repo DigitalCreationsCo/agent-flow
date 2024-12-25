@@ -13,7 +13,7 @@ export const EmptyPage = ({ setOpenModal }: EmptyPageProps) => {
 
   return (
     <div className="m-0 h-full w-full bg-secondary p-0">
-      <div className="text-container">
+      <div className="text-container bg-gradient-to-b from-zinc-900 from-40% to-blue-900">
         <div className="relative z-20 flex w-full flex-col items-center justify-center gap-2">
           {ENABLE_NEW_LOGO ? (
             <LangflowLogo className="h-7 w-8" />
@@ -45,7 +45,7 @@ export const EmptyPage = ({ setOpenModal }: EmptyPageProps) => {
           </Button>
         </div>
       </div>
-      <div className="gradient-bg">
+      {/* <div className="gradient-bg">
         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
           <defs>
             <filter id="lf-balls">
@@ -75,7 +75,7 @@ export const EmptyPage = ({ setOpenModal }: EmptyPageProps) => {
           <div className="g5" />
           <div className="g6" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -9,6 +9,11 @@ export const URLs = {
   BUILDS: `monitor/builds`,
   STORE: `store`,
   USERS: "users",
+  CUSTOMERS: "customers",
+  PRODUCTS: `subscriptions/products`,
+  PRICES: `subscriptions/prices`,
+  SUBSCRIPTIONS: `subscriptions/subscriptions`,
+  SUBSCRIPTION: `subscriptions/subscription`,
   LOGOUT: `logout`,
   LOGIN: `login`,
   AUTOLOGIN: "auto_login",
@@ -22,6 +27,7 @@ export const URLs = {
   CONFIG: `config`,
   STARTER_PROJECTS: `starter-projects`,
   SIDEBAR_CATEGORIES: `sidebar_categories`,
+  CHECKOUT: `stripe/checkout`,
   ALL: `all`,
 } as const;
 

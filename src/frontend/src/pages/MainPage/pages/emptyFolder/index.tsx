@@ -17,6 +17,7 @@ export const EmptyFolder = ({ setOpenModal }: EmptyFolderProps) => {
           data-testid="mainpage_title"
         >
           {folders?.length > 1 ? "Empty folder" : "Start building"}
+          TEST EMPTY FOLDER
         </h3>
         <p className="pb-5 text-sm text-secondary-foreground">
           Begin with a template, or start from scratch.

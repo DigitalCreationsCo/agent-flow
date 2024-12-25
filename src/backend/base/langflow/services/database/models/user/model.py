@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from uuid import UUID, uuid4
 
 from sqlmodel import Field, Relationship, SQLModel
@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from langflow.services.database.models.flow import Flow
     from langflow.services.database.models.folder import Folder
     from langflow.services.database.models.variable import Variable
+    from langflow.services.database.models.subscription.model import SubscriptionTable
 
 
 class User(SQLModel, table=True):  # type: ignore[call-arg]
@@ -23,6 +24,7 @@ class User(SQLModel, table=True):  # type: ignore[call-arg]
     create_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     last_login_at: datetime | None = Field(default=None, nullable=True)
+    stripe_customer_id: str | None = Field(default=None, nullable=True, index=True)
     api_keys: list["ApiKey"] = Relationship(
         back_populates="user",
         sa_relationship_kwargs={"cascade": "delete"},
@@ -37,7 +39,11 @@ class User(SQLModel, table=True):  # type: ignore[call-arg]
         back_populates="user",
         sa_relationship_kwargs={"cascade": "delete"},
     )
-
+    subscriptions: list["SubscriptionTable"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"cascade": "delete"},
+    )
+    
 
 class UserCreate(SQLModel):
     username: str = Field()

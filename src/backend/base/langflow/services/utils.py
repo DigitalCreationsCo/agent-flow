@@ -25,54 +25,62 @@ if TYPE_CHECKING:
 
 
 async def get_or_create_super_user(session: AsyncSession, username, password, is_default):
+    """Get or create a superuser with better error handling and logging."""
     from langflow.services.database.models.user.model import User
 
-    stmt = select(User).where(User.username == username)
-    user = (await session.exec(stmt)).first()
-
-    if user and user.is_superuser:
-        return None  # Superuser already exists
-
-    if user and is_default:
-        if user.is_superuser:
-            if verify_password(password, user.password):
-                return None
-            # Superuser exists but password is incorrect
-            # which means that the user has changed the
-            # base superuser credentials.
-            # This means that the user has already created
-            # a superuser and changed the password in the UI
-            # so we don't need to do anything.
-            logger.debug(
-                "Superuser exists but password is incorrect. "
-                "This means that the user has changed the "
-                "base superuser credentials."
-            )
-            return None
-        logger.debug("User with superuser credentials exists but is not a superuser.")
-        return None
-
-    if user:
-        if verify_password(password, user.password):
-            msg = "User with superuser credentials exists but is not a superuser."
-            raise ValueError(msg)
-        msg = "Incorrect superuser credentials"
-        raise ValueError(msg)
-
-    if is_default:
-        logger.debug("Creating default superuser.")
-    else:
-        logger.debug("Creating superuser.")
     try:
-        return await create_super_user(username, password, db=session)
-    except Exception as exc:  # noqa: BLE001
-        if "UNIQUE constraint failed: user.username" in str(exc):
-            # This is to deal with workers running this
-            # at startup and trying to create the superuser
-            # at the same time.
-            logger.opt(exception=True).debug("Superuser already exists.")
+        # Check if user exists
+        stmt = select(User).where(User.username == username)
+        user = (await session.exec(stmt)).first()
+        logger.debug(f"Checking for existing user: {username}")
+
+        if user and user.is_superuser:
+            logger.debug(f"Superuser {username} already exists")
             return None
-        logger.opt(exception=True).debug("Error creating superuser.")
+
+        if user and is_default:
+            if user.is_superuser:
+                if verify_password(password, user.password):
+                    logger.debug("Default superuser verified successfully")
+                    return None
+                logger.debug(
+                    "Superuser exists with different password - "
+                    "likely changed via UI, skipping creation"
+                )
+                return None
+            logger.debug("User exists but is not a superuser")
+            return None
+
+        if user:
+            if verify_password(password, user.password):
+                msg = f"User {username} exists but is not a superuser"
+                logger.error(msg)
+                raise ValueError(msg)
+            msg = f"Incorrect credentials for existing user: {username}"
+            logger.error(msg)
+            raise ValueError(msg)
+
+        # Create new superuser
+        logger.info(
+            f"Creating {'default ' if is_default else ''}superuser: {username}"
+        )
+        try:
+            new_user = await create_super_user(username, password, db=session)
+            if new_user:
+                logger.info(f"Successfully created superuser: {username}")
+            return new_user
+        except Exception as create_exc:
+            if "UNIQUE constraint failed: user.username" in str(create_exc):
+                logger.warning(
+                    "Race condition detected - superuser already created by another process"
+                )
+                return None
+            logger.exception("Failed to create superuser")
+            raise
+
+    except Exception as exc:
+        logger.exception(f"Error in get_or_create_super_user: {str(exc)}")
+        raise RuntimeError(f"Superuser operation failed: {str(exc)}") from exc
 
 
 async def setup_superuser(settings_service, session: AsyncSession) -> None:
@@ -83,7 +91,10 @@ async def setup_superuser(settings_service, session: AsyncSession) -> None:
         await teardown_superuser(settings_service, session)
 
     username = settings_service.auth_settings.SUPERUSER
+    print(f"Username: {username}")
+
     password = settings_service.auth_settings.SUPERUSER_PASSWORD
+    print(f"Password: {password}")
 
     is_default = (username == DEFAULT_SUPERUSER) and (password == DEFAULT_SUPERUSER_PASSWORD)
 

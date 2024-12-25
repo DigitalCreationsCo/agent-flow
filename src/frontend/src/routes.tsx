@@ -32,6 +32,7 @@ import ApiKeysPage from "./pages/SettingsPage/pages/ApiKeysPage";
 import GeneralPage from "./pages/SettingsPage/pages/GeneralPage";
 import GlobalVariablesPage from "./pages/SettingsPage/pages/GlobalVariablesPage";
 import MessagesPage from "./pages/SettingsPage/pages/messagesPage";
+import BillingPage from "./pages/SettingsPage/pages/BillingPage";
 import ShortcutsPage from "./pages/SettingsPage/pages/ShortcutsPage";
 import StorePage from "./pages/StorePage";
 import ViewPage from "./pages/ViewPage";
@@ -165,6 +166,7 @@ const router = createBrowserRouter(
                   />
                   <Route path="shortcuts" element={<ShortcutsPage />} />
                   <Route path="messages" element={<MessagesPage />} />
+                  <Route path="billing" element={<BillingPage />} />
                 </Route>
                 <Route
                   path="store"

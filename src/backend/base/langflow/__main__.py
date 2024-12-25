@@ -189,9 +189,26 @@ def run(
     frontend_path = settings_service.settings.frontend_path
     backend_only = settings_service.settings.backend_only
 
-    # create path object if frontend_path is provided
-    static_files_dir: Path | None = Path(frontend_path) if frontend_path else None
-
+    print(f"Frontend path (original): {frontend_path}")
+    if frontend_path:
+        # Hardcoded approach - adjust this path to match your project structure
+        project_root = Path(__file__).parent.parent.parent.parent  # Go up to agent-flow root
+        static_files_dir = (project_root / "frontend" / "build").resolve()
+        print(f"Frontend path (hardcoded): {static_files_dir}")
+        
+        # Verify the path exists
+        if not static_files_dir.exists():
+            print(f"Warning: Hardcoded path does not exist: {static_files_dir}")
+            # Fallback to original path resolution
+            try:
+                static_files_dir = Path(frontend_path).resolve()
+            except Exception as e:
+                print(f"Error with fallback path: {e}")
+                static_files_dir = None
+    else:
+        static_files_dir = None
+    print(f"Static files directory: {static_files_dir}")
+    
     app = setup_app(static_files_dir=static_files_dir, backend_only=backend_only)
     # check if port is being used
     if is_port_in_use(port, host):

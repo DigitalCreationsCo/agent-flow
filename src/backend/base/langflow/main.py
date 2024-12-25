@@ -274,6 +274,8 @@ def setup_static_files(app: FastAPI, static_files_dir: Path) -> None:
 def get_static_files_dir():
     """Get the static files directory relative to Langflow's main.py file."""
     frontend_path = Path(__file__).parent
+    print(f"Frontend path: {frontend_path}")
+    print(f"Frontend path: {frontend_path / 'frontend'}")
     return frontend_path / "frontend"
 
 
@@ -281,9 +283,11 @@ def setup_app(static_files_dir: Path | None = None, *, backend_only: bool = Fals
     """Setup the FastAPI app."""
     # get the directory of the current file
     logger.info(f"Setting up app with static files directory {static_files_dir}")
+    print(f"Setting up app with static files directory {static_files_dir}")
     if not static_files_dir:
+        print("Getting static files directory")
         static_files_dir = get_static_files_dir()
-
+        print(f"Static files directory: {static_files_dir}")
     if not backend_only and (not static_files_dir or not static_files_dir.exists()):
         msg = f"Static files directory {static_files_dir} does not exist."
         raise RuntimeError(msg)

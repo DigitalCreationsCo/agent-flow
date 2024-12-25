@@ -79,19 +79,6 @@ export default function AppHeader(): JSX.Element {
 
       {/* Right Section */}
       <div className={`flex items-center gap-2`}>
-        {!ENABLE_DATASTAX_LANGFLOW && (
-          <>
-            <Button
-              unstyled
-              className="hidden items-center whitespace-nowrap pr-2 2xl:inline"
-              onClick={() =>
-                window.open("https://github.com/langflow-ai/langflow", "_blank")
-              }
-            >
-              <GithubStarComponent />
-            </Button>
-          </>
-        )}
         <AlertDropdown
           notificationRef={notificationContentRef}
           onClose={() => setActiveState(null)}
@@ -131,7 +118,7 @@ export default function AppHeader(): JSX.Element {
             </AlertDropdown>
           </ShadTooltip>
         </AlertDropdown>
-        {!ENABLE_DATASTAX_LANGFLOW && (
+        {/* {!ENABLE_DATASTAX_LANGFLOW && (
           <>
             <ShadTooltip
               content="Go to LangflowStore"
@@ -160,7 +147,7 @@ export default function AppHeader(): JSX.Element {
               className="my-auto h-7 dark:border-zinc-700"
             />
           </>
-        )}
+        )} */}
         {ENABLE_DATASTAX_LANGFLOW && (
           <>
             <ShadTooltip content="Docs" side="bottom" styleClasses="z-10">

@@ -11,7 +11,8 @@ from langflow.api.v1.store import router as store_router
 from langflow.api.v1.users import router as users_router
 from langflow.api.v1.validate import router as validate_router
 from langflow.api.v1.variable import router as variables_router
-
+from langflow.api.v1.subscriptions import router as subscriptions_router
+from langflow.api.v1.stripe import router as stripe_router
 __all__ = [
     "api_key_router",
     "chat_router",
@@ -26,4 +27,6 @@ __all__ = [
     "users_router",
     "validate_router",
     "variables_router",
+    "subscriptions_router",
+    "stripe_router",
 ]

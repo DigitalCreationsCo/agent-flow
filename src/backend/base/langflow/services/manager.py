@@ -30,6 +30,7 @@ class ServiceManager:
     def register_factories(self) -> None:
         for factory in self.get_factories():
             try:
+                print(f"Registering factory for {factory}")
                 self.register_factory(factory)
             except Exception:  # noqa: BLE001
                 logger.exception(f"Error initializing {factory}")
@@ -40,6 +41,8 @@ class ServiceManager:
     ) -> None:
         """Registers a new factory with dependencies."""
         service_name = service_factory.service_class.name
+        print(f"Registering factory for {service_name}")
+
         self.factories[service_name] = service_factory
 
     def get(self, service_name: ServiceType, default: ServiceFactory | None = None) -> Service:
@@ -112,6 +115,8 @@ class ServiceManager:
         for name in service_names:
             try:
                 module_name = f"{base_module}.{name}.factory"
+                print(f"Importing module: {module_name}")
+
                 module = importlib.import_module(module_name)
 
                 # Find all classes in the module that are subclasses of ServiceFactory

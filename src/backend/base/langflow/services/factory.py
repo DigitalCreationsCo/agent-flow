@@ -72,8 +72,12 @@ def import_all_services_into_a_dict():
     for service_type in ServiceType:
         try:
             service_name = ServiceType(service_type).value.replace("_service", "")
+            print(f"Importing service: {service_name}")
             module_name = f"langflow.services.{service_name}.service"
+            print(f"Importing module: {module_name}")
+
             module = importlib.import_module(module_name)
+            print(f"Module: {module}")
             services.update(
                 {
                     name: obj
