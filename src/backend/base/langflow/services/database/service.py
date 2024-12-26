@@ -374,7 +374,18 @@ class DatabaseService(Service):
 
         inspector = inspect(connection)
         table_names = inspector.get_table_names()
-        current_tables = ["flow", "user", "apikey", "folder", "message", "variable", "transaction", "vertex_build", "subscription", "product"]
+        current_tables = [
+            "flow",
+            "user",
+            "apikey",
+            "folder",
+            "message",
+            "variable",
+            "transaction",
+            "vertex_build",
+            "subscription",
+            "product",
+        ]
 
         if table_names and all(table in table_names for table in current_tables):
             logger.debug("Database and tables already exist")

@@ -9,7 +9,7 @@ export const calculateTrialEndUnixTimestamp = (
     ) {
       return undefined;
     }
-  
+
     const currentDate = new Date(); // Current date and time
     const trialEnd = new Date(
       currentDate.getTime() + (trialPeriodDays + 1) * 24 * 60 * 60 * 1000

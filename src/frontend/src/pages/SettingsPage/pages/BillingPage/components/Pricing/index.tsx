@@ -24,7 +24,7 @@ export default function Pricing({ user }: Props) {
   const { data: subscription, isLoading: isSubscriptionLoading, isFetching: isSubscriptionFetching } = useGetSubscription(user?.subscription_id ?? '');
   const { data: products, isLoading: isProductsLoading, isFetching: isProductsFetching } = useGetProducts();
   const { data: prices, isLoading: isPricesLoading, isFetching: isPricesFetching } = useGetPrices();
-  
+
   console.log(`products `, products)
   console.log(`prices `, prices)
   console.log(`subscription `, subscription)
@@ -38,7 +38,7 @@ export default function Pricing({ user }: Props) {
   const [billingInterval, setBillingInterval] =
   useState<BillingInterval>('month');
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
-  
+
   const navigate = useCustomNavigate();
   const location = useLocation();
   const currentPath = location.pathname;

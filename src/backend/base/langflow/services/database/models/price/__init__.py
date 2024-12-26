@@ -1,7 +1,3 @@
-from .model import PriceTable, PriceType, PriceInterval
+from .model import PriceInterval, PriceTable, PriceType
 
-__all__ = [
-    "PriceTable",
-    "PriceType",
-    "PriceInterval"
-] 
+__all__ = ["PriceInterval", "PriceTable", "PriceType"]

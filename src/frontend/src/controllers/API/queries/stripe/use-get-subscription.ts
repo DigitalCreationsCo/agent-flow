@@ -6,7 +6,7 @@ import { Subscription, SubscriptionWithProduct } from "@/types/billing";
 
 export const useGetSubscription: useQueryFunctionType<string | undefined, SubscriptionWithProduct | null> = (
   subscriptionId?: string,
-  options?, 
+  options?,
 ) => {
   const { query } = UseRequestProcessor();
 
@@ -37,7 +37,7 @@ export const useGetSubscription: useQueryFunctionType<string | undefined, Subscr
   };
 
   const queryResult = query(
-    ["useGetSubscription", subscriptionId], 
+    ["useGetSubscription", subscriptionId],
     getSubscription,
     {
       enabled: !!subscriptionId,

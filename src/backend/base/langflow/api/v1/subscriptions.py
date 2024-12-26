@@ -1,31 +1,26 @@
-from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, HTTPException
+from pydantic import ValidationError
 
-from langflow.api.utils import DbSession, custom_params
+from langflow.api.utils import DbSession
+from langflow.schema.product import (
+    PriceRead,
+    ProductRead,
+)
+from langflow.schema.subscription import SubscriptionCreate, SubscriptionRead, SubscriptionUpdate
 from langflow.services.database.models.price.crud import get_prices
 from langflow.services.database.models.product.crud import get_products
 from langflow.services.database.models.subscription.crud import (
-    get_subscriptions,
-    get_subscription,
     create_subscription,
+    delete_subscription,
+    get_subscription,
+    get_subscriptions,
     update_subscription,
-    delete_subscription
 )
-from langflow.schema.subscription import (
-    SubscriptionRead,
-    SubscriptionCreate,
-    SubscriptionUpdate
-)
-from typing import List, Optional
-from langflow.schema.product import (
-    ProductRead,
-    PriceRead,
-)
-from pydantic import ValidationError
 
 router = APIRouter(prefix="/subscriptions", tags=["Subscriptions"])
+
 
 @router.get("/subscriptions")
 async def list_subscriptions(session: DbSession) -> list[SubscriptionRead]:
@@ -34,11 +29,9 @@ async def list_subscriptions(session: DbSession) -> list[SubscriptionRead]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 @router.get("/subscription/{subscription_id}", response_model=SubscriptionRead)
-async def get_subscription_by_id(
-    subscription_id: UUID,
-    session: DbSession
-) -> SubscriptionRead:
+async def get_subscription_by_id(subscription_id: UUID, session: DbSession) -> SubscriptionRead:
     try:
         subscription = await get_subscription(session, subscription_id)
         if subscription is None:
@@ -47,15 +40,14 @@ async def get_subscription_by_id(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 @router.post("/subscriptions", response_model=SubscriptionRead)
-async def create_new_subscription(
-    subscription: SubscriptionCreate,
-    session: DbSession
-) -> SubscriptionRead:
+async def create_new_subscription(subscription: SubscriptionCreate, session: DbSession) -> SubscriptionRead:
     try:
         return await create_subscription(session, subscription)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
 
 @router.patch("/subscriptions/{subscription_id}", response_model=SubscriptionRead)
 async def update_subscription_by_id(
@@ -71,6 +63,7 @@ async def update_subscription_by_id(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 @router.delete("/subscriptions/{subscription_id}", status_code=204)
 async def delete_subscription_by_id(subscription_id: UUID, session: DbSession) -> None:
     try:
@@ -80,7 +73,8 @@ async def delete_subscription_by_id(subscription_id: UUID, session: DbSession) -
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
-@router.get("/products", response_model=List[ProductRead])
+
+@router.get("/products", response_model=list[ProductRead])
 async def list_products(
     session: DbSession,
     # active: Optional[bool] = None
@@ -92,8 +86,9 @@ async def list_products(
         return products
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
-    
-@router.get("/prices", response_model=List[PriceRead])
+
+
+@router.get("/prices", response_model=list[PriceRead])
 async def list_prices(session: DbSession):
     """Get all prices."""
     try:
@@ -105,8 +100,9 @@ async def list_prices(session: DbSession):
         print(f"Validation error: {ve}")
         raise HTTPException(status_code=500, detail=str(ve)) from ve
     except Exception as e:
-        print(f"Error in list_prices: {str(e)}")
+        print(f"Error in list_prices: {e!s}")
         print(f"Error type: {type(e)}")
         import traceback
+
         print(f"Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e)) from e

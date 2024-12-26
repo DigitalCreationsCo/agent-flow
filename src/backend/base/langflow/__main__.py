@@ -195,7 +195,7 @@ def run(
         project_root = Path(__file__).parent.parent.parent.parent  # Go up to agent-flow root
         static_files_dir = (project_root / "frontend" / "build").resolve()
         print(f"Frontend path (hardcoded): {static_files_dir}")
-        
+
         # Verify the path exists
         if not static_files_dir.exists():
             print(f"Warning: Hardcoded path does not exist: {static_files_dir}")
@@ -208,7 +208,7 @@ def run(
     else:
         static_files_dir = None
     print(f"Static files directory: {static_files_dir}")
-    
+
     app = setup_app(static_files_dir=static_files_dir, backend_only=backend_only)
     # check if port is being used
     if is_port_in_use(port, host):

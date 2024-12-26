@@ -74,7 +74,7 @@ export const BillingPage = () => {
       </div>
 
       <div className="flex w-full flex-col gap-6 h-full">
-        <Pricing 
+        <Pricing
           user={userData}
         />
       </div>

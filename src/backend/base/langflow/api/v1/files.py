@@ -133,34 +133,31 @@ async def download_profile_picture(
     try:
         storage_service = get_storage_service()
         extension = file_name.split(".")[-1]
-        
+
         # Debug the actual path being used
         config_dir = storage_service.settings_service.settings.config_dir
         print(f"Config dir: {config_dir}")  # Debug print
-        
+
         config_path = Path(config_dir).expanduser().resolve()  # Explicitly resolve the path
         print(f"Config path: {config_path}")  # Debug print
-        
+
         folder_path = config_path / "profile_pictures" / folder_name
         print(f"Full folder path: {folder_path}")  # Debug print
-        
+
         content_type = build_content_type_from_extension(extension)
-        
+
         # Convert folder_path to string and ensure it exists
         folder_path_str = str(folder_path)
         if not folder_path.exists():
-            raise HTTPException(
-                status_code=404, 
-                detail=f"Folder not found: {folder_path_str}"
-            )
-            
+            raise HTTPException(status_code=404, detail=f"Folder not found: {folder_path_str}")
+
         file_content = await storage_service.get_file(
             flow_id=folder_path_str,  # Convert to string
-            file_name=file_name
+            file_name=file_name,
         )
         return StreamingResponse(BytesIO(file_content), media_type=content_type)
     except Exception as e:
-        print(f"Error: {str(e)}")  # Debug print
+        print(f"Error: {e!s}")  # Debug print
         raise HTTPException(status_code=500, detail=str(e)) from e
 
 
@@ -170,7 +167,7 @@ async def list_profile_pictures():
         storage_service = get_storage_service()
         config_dir = storage_service.settings_service.settings.config_dir
         print(f"Config dir: {config_dir}")  # Debug print
-        
+
         config_path = Path(config_dir).expanduser().resolve()  # Explicitly resolve the path
         print(f"Config path: {config_path}")  # Debug print
 

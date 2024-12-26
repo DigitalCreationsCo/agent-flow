@@ -13,7 +13,7 @@ export const getStatusRedirect = (
     //   disableButton,
     //   arbitraryParams
     // );
-  
+
   export const getErrorRedirect = (
     path: string,
     errorName: string,

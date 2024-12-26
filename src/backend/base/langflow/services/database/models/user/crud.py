@@ -61,6 +61,7 @@ async def update_user_last_login_at(user_id: UUID, db: AsyncSession):
     except Exception as e:  # noqa: BLE001
         logger.error(f"Error updating user last login at: {e!s}")
 
+
 async def update_user_customer_id(user_id: UUID, customer_id: str, db: AsyncSession):
     user = await get_user_by_id(db, user_id)
     user.customer_id = customer_id

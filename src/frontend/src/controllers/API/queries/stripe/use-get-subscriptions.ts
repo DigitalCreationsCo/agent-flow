@@ -5,7 +5,7 @@ import { UseRequestProcessor } from "../../services/request-processor";
 import { Subscription } from "@/types/billing";
 
 export const useGetSubscriptions: useQueryFunctionType<undefined, Subscription> = (
-  options?, 
+  options?,
 ) => {
   const { query } = UseRequestProcessor();
 

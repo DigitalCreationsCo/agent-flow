@@ -43,10 +43,7 @@ async def get_or_create_super_user(session: AsyncSession, username, password, is
                 if verify_password(password, user.password):
                     logger.debug("Default superuser verified successfully")
                     return None
-                logger.debug(
-                    "Superuser exists with different password - "
-                    "likely changed via UI, skipping creation"
-                )
+                logger.debug("Superuser exists with different password - " "likely changed via UI, skipping creation")
                 return None
             logger.debug("User exists but is not a superuser")
             return None
@@ -61,9 +58,7 @@ async def get_or_create_super_user(session: AsyncSession, username, password, is
             raise ValueError(msg)
 
         # Create new superuser
-        logger.info(
-            f"Creating {'default ' if is_default else ''}superuser: {username}"
-        )
+        logger.info(f"Creating {'default ' if is_default else ''}superuser: {username}")
         try:
             new_user = await create_super_user(username, password, db=session)
             if new_user:
@@ -71,16 +66,14 @@ async def get_or_create_super_user(session: AsyncSession, username, password, is
             return new_user
         except Exception as create_exc:
             if "UNIQUE constraint failed: user.username" in str(create_exc):
-                logger.warning(
-                    "Race condition detected - superuser already created by another process"
-                )
+                logger.warning("Race condition detected - superuser already created by another process")
                 return None
             logger.exception("Failed to create superuser")
             raise
 
     except Exception as exc:
-        logger.exception(f"Error in get_or_create_super_user: {str(exc)}")
-        raise RuntimeError(f"Superuser operation failed: {str(exc)}") from exc
+        logger.exception(f"Error in get_or_create_super_user: {exc!s}")
+        raise RuntimeError(f"Superuser operation failed: {exc!s}") from exc
 
 
 async def setup_superuser(settings_service, session: AsyncSession) -> None:
