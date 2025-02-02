@@ -34,4 +34,6 @@ RUN apt-get update && apt-get install -y \
 # Verify installations
 RUN az --version && docker --version
 
+RUN az container create --resource-group agentflow --file deploy/deploy.azure.yml
+
 CMD ["/bin/bash"]
