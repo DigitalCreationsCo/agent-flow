@@ -42,6 +42,13 @@ Aurora's secret is managed by [AWS Secrets Manager](https://aws.amazon.com/secre
 1. Enter your user name and password to sign in. If you have not set a user name and password in your `.env` file, the user name will be set to `admin` and the password to `123456`.
    ![signin-langflow](./img/langflow-signin.png)
 
+# Assume Identity Role
+1. Run the following command in local terminal to set aws cli credentials:
+Note: You must configure an IAM role with the necessary project permissions.
+   ```shell
+   aws configure
+   ```
+
 # Cleanup
 
 1. Run the following command in the Cloud9 terminal.
