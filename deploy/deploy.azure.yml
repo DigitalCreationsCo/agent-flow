@@ -1,0 +1,118 @@
+apiVersion: '2021-07-01'
+location: West Central US
+name: agentflow-container-group
+properties:
+  containers:
+  - name: backend
+    properties:
+      image: agentflowcr.azurecr.io/langflow-backend:latest
+      resources:
+        requests:
+          cpu: 4.0
+          memoryInGB: 8.0
+      ports:
+      - port: 7860
+      environmentFiles:
+      - .env
+      
+  - name: frontend
+    properties:
+      image: agentflowcr.azurecr.io/langflow-frontend:latest
+      resources:
+        requests:
+          cpu: 4.0
+          memoryInGB: 4.0
+      ports:
+      - port: 80
+      environmentFiles:
+      - .env
+
+  - name: db
+    properties:
+      image: agentflowcr.azurecr.io/postgres:15.4
+      resources:
+        requests:
+          cpu: 1.0
+          memoryInGB: 2.0
+      environmentFiles:
+      - .env
+      volumeMounts:
+      - name: postgres-data
+        mountPath: /var/lib/postgresql/data/pgdata
+
+  - name: redis
+    properties:
+      image: agentflowcr.azurecr.io/redis:6.2.5
+      resources:
+        requests:
+          cpu: 0.5
+          memoryInGB: 2.0
+      ports:
+      - port: 6379
+
+  - name: broker
+    properties:
+      image: agentflowcr.azurecr.io/rabbitmq:3-management
+      resources:
+        requests:
+          cpu: 1.0
+          memoryInGB: 1.0
+      ports:
+      - port: 5672
+      - port: 15672
+      environmentVariables:
+      - name: RABBITMQ_DEFAULT_USER
+        value: admin
+      - name: RABBITMQ_DEFAULT_PASS
+        value: admin
+      volumeMounts:
+      - name: rabbitmq-data
+        mountPath: /var/lib/rabbitmq
+
+  - name: celeryworker
+    properties:
+      image: agentflowcr.azurecr.io/langflow-backend:latest
+      command: 
+      - /bin/sh
+      - -c
+      - "python -m celery -A langflow.worker.celery_app worker --loglevel=INFO --concurrency=1 -n lf-worker@%h -P eventlet"
+      resources:
+        requests:
+          cpu: 1.0
+          memoryInGB: 2.0
+      environmentFiles:
+      - .env
+
+  volumes:
+  - name: postgres-data
+    azureFile:
+      shareName: postgres-data
+      storageAccountName: <storage-account-name>
+      storageAccountKey: <storage-account-key>
+  - name: rabbitmq-data
+    azureFile:
+      shareName: rabbitmq-data
+      storageAccountName: <storage-account-name>
+      storageAccountKey: <storage-account-key>
+
+  imageRegistryCredentials:
+  - server: agentflowcr.azurecr.io
+    username: agentflowcr
+    password: <registry-password>
+
+  ipAddress:
+    type: Public
+    ports:
+    - protocol: tcp
+      port: 80
+    - protocol: tcp
+      port: 7860
+    - protocol: tcp
+      port: 5672
+    - protocol: tcp
+      port: 15672
+    - protocol: tcp
+      port: 6379
+    dnsNameLabel: agentflow
+
+  osType: Linux
