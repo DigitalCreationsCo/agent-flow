@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_REGISTRY=$DOCKER_REGISTRY
+CONTAINER_REGISTRY=$CONTAINER_REGISTRY
 
 # Properly parse IMAGE ID, NAME, and TAG
 docker image ls --format "{{.ID}},{{.Repository}},{{.Tag}}" | while IFS=',' read -r IMAGE_ID NAME TAG; do

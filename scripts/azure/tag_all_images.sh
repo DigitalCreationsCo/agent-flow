@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_REGISTRY=$DOCKER_REGISTRY
+CONTAINER_REGISTRY=$CONTAINER_REGISTRY
 
 # Properly parse IMAGE ID, NAME, and TAG
 docker image ls --format "{{.ID}},{{.Repository}},{{.Tag}}" | while IFS=',' read -r IMAGE_ID NAME TAG; do
@@ -12,9 +12,9 @@ docker image ls --format "{{.ID}},{{.Repository}},{{.Tag}}" | while IFS=',' read
 
     echo "Running tag command for Image ID: $IMAGE_ID, Name: $LAST_NAME, Tag: $TAG\n"
     
-    echo "docker tag $IMAGE_ID ${DOCKER_REGISTRY}/${LAST_NAME}:${TAG}\n"
+    echo "docker tag $IMAGE_ID ${CONTAINER_REGISTRY}/${LAST_NAME}:${TAG}\n"
     # Tag the image with the new name
-    docker tag $IMAGE_ID "${DOCKER_REGISTRY}/${LAST_NAME}:${TAG}"
+    docker tag $IMAGE_ID "${CONTAINER_REGISTRY}/${LAST_NAME}:${TAG}"
 
     docker image ls
 
