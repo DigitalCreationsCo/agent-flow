@@ -80,7 +80,7 @@ properties:
         requests:
           cpu: 1.0
           memoryInGB: 2.0
-      environmentFiles:
+      environmentFiles: #FIX
       - .env
 
   volumes:

@@ -280,3 +280,4 @@ src/frontend/temp
 
 .dspy_cache/
 *.db
+.azure

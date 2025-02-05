@@ -1,6 +1,6 @@
 services:
   proxy:
-    image: "agentflowcr.azurecr.io/traefik:v3.0"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/traefik:v3.0"
     env_file:
       - .env
     networks:
@@ -67,7 +67,7 @@ services:
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.middlewares=${STACK_NAME?Variable not set}-www-redirect,${STACK_NAME?Variable not set}-https-redirect
 
   backend: &backend
-    image: "agentflowcr.azurecr.io/langflow-backend:latest"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/langflow-backend:latest"
     depends_on:
       - db
       - broker
@@ -84,7 +84,7 @@ services:
         - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=7860
 
   db:
-    image: "agentflowcr.azurecr.io/postgres:15.4"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/postgres:15.4"
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     environment:
@@ -99,7 +99,7 @@ services:
       - .env
 
   pgadmin:
-    image: "agentflowcr.azurecr.io/pgadmin4"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/pgadmin4"
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
@@ -122,7 +122,7 @@ services:
         - traefik.http.services.${STACK_NAME?Variable not set}-pgadmin.loadbalancer.server.port=5050
 
   result_backend:
-    image: "agentflowcr.azurecr.io/redis:6.2.5"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/redis:6.2.5"
     env_file:
       - .env
     ports:
@@ -165,7 +165,7 @@ services:
         - traefik.http.services.${STACK_NAME?Variable not set}-flower.loadbalancer.server.port=5555
 
   frontend:
-    image: "agentflowcr.azurecr.io/langflow-frontend:latest"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/langflow-frontend:latest"
     env_file:
       - .env
     restart: on-failure
@@ -178,7 +178,7 @@ services:
 
   broker:
     # RabbitMQ management console
-    image: "agentflowcr.azurecr.io/rabbitmq:3-management"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/rabbitmq:3-management"
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-admin}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-admin}
@@ -191,7 +191,7 @@ services:
       - 15672:15672
 
   prometheus:
-    image: "agentflowcr.azurecr.io/prometheus:v2.37.9"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/prometheus:v2.37.9"
     env_file:
       - .env
     volumes:
@@ -210,7 +210,7 @@ services:
         - traefik.http.services.${STACK_NAME?Variable not set}-prometheus.loadbalancer.server.port=9090
 
   grafana:
-    image: "agentflowcr.azurecr.io/grafana:8.2.6"
+    image: "${CONTAINER_REGISTRY}.azurecr.io/grafana:8.2.6"
     env_file:
       - .env
     # ports:

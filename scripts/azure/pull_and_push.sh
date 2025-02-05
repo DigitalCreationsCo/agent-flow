@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ensure the DOCKER_REGISTRY environment variable is set
-export DOCKER_REGISTRY="agentflowcr.azurecr.io"
+export CONTAINER_REGISTRY="crkespqt3s2yars.azurecr.io"
 export DOCKER_CLIENT_TIMEOUT=10000
 export COMPOSE_HTTP_TIMEOUT=10000
 
@@ -42,4 +42,4 @@ fi
 cd "../../deploy" || { echo "Deploy directory not found"; exit 1; }
 
 # Use the Azure-specific Docker Compose file
-docker compose --file "docker-compose.azure.yml" up
+CONTAINER_REGISTRY=$CONTAINER_REGISTRY docker compose --file "docker-compose.azure.yml" up
