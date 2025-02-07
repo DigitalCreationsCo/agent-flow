@@ -128,19 +128,31 @@ function ApiInterceptor() {
         }
 
         const accessToken = cookies.get(LANGFLOW_ACCESS_TOKEN);
+
+        console.log('isAuthorizedURL(config?.url)? ', isAuthorizedURL(config?.url))
+
         if (accessToken && !isAuthorizedURL(config?.url)) {
           config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
 
+        console.log('config.headers ', JSON.stringify(config.headers));
+
         const currentOrigin = window.location.origin;
         const requestUrl = new URL(config?.url as string, currentOrigin);
 
+        console.log('current origin: ', window.location.origin);
+        console.log('request url: ', new URL(config?.url as string, currentOrigin));
+
         const urlIsFromCurrentOrigin = requestUrl.origin === currentOrigin;
+        console.log('urlIsFromCurrentOrigin ', urlIsFromCurrentOrigin)
+
         if (urlIsFromCurrentOrigin) {
           for (const [key, value] of Object.entries(customHeaders)) {
             config.headers[key] = value;
           }
         }
+
+        console.log('config.headers ', JSON.stringify(config.headers));
 
         return {
           ...config,
