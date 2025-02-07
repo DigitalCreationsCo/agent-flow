@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
-    gnupg
+    gnupg \
+    lsb-release
 
 
 # Add google publickey and distribution URI for google cloud cli
@@ -33,6 +34,7 @@ RUN apt-get update && apt-get install -y \
 
 # Verify installations
 RUN docker --version
-RUN gcloud init
+
+RUN gcloud init # TO DO: RESOLVE THIS COMMAND NON-INTERACTIVELY
 
 CMD ["/bin/bash"]
