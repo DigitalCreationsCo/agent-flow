@@ -1,23 +1,25 @@
 apiVersion: '2021-07-01'
-location: West Central US
-name: agentflow-container-group
+location: Central US
+name: agentflowcg
 properties:
   containers:
   - name: backend
     properties:
-      image: agentflowcr.azurecr.io/langflow-backend:latest
+      image: crkespqt3s2yars.azurecr.io/langflow-backend:latest
       resources:
         requests:
           cpu: 4.0
           memoryInGB: 8.0
       ports:
       - port: 7860
-      environmentFiles:
-      - .env
+      environmentVariables:
+      - name: string
+        value: string
+        secureValue: string
       
   - name: frontend
     properties:
-      image: agentflowcr.azurecr.io/langflow-frontend:latest
+      image: crkespqt3s2yars.azurecr.io/langflow-frontend:latest
       resources:
         requests:
           cpu: 4.0
@@ -29,7 +31,7 @@ properties:
 
   - name: db
     properties:
-      image: agentflowcr.azurecr.io/postgres:15.4
+      image: crkespqt3s2yars.azurecr.io/postgres:15.4
       resources:
         requests:
           cpu: 1.0
@@ -42,7 +44,7 @@ properties:
 
   - name: redis
     properties:
-      image: agentflowcr.azurecr.io/redis:6.2.5
+      image: crkespqt3s2yars.azurecr.io/redis:6.2.5
       resources:
         requests:
           cpu: 0.5
@@ -52,7 +54,7 @@ properties:
 
   - name: broker
     properties:
-      image: agentflowcr.azurecr.io/rabbitmq:3-management
+      image: crkespqt3s2yars.azurecr.io/rabbitmq:3-management
       resources:
         requests:
           cpu: 1.0
@@ -71,7 +73,7 @@ properties:
 
   - name: celeryworker
     properties:
-      image: agentflowcr.azurecr.io/langflow-backend:latest
+      image: crkespqt3s2yars.azurecr.io/langflow-backend:latest
       command: 
       - /bin/sh
       - -c
@@ -80,25 +82,25 @@ properties:
         requests:
           cpu: 1.0
           memoryInGB: 2.0
-      environmentFiles: #FIX
+      environmentFiles: 
       - .env
 
   volumes:
   - name: postgres-data
     azureFile:
       shareName: postgres-data
-      storageAccountName: <storage-account-name>
-      storageAccountKey: <storage-account-key>
+      storageAccountName: agentflowsa
+      storageAccountKey: <storage_key>
   - name: rabbitmq-data
     azureFile:
       shareName: rabbitmq-data
-      storageAccountName: <storage-account-name>
-      storageAccountKey: <storage-account-key>
+      storageAccountName: agentflowsa
+      storageAccountKey: <storage_key>
 
   imageRegistryCredentials:
-  - server: agentflowcr.azurecr.io
-    username: agentflowcr
-    password: <registry-password>
+  - server: crkespqt3s2yars.azurecr.io
+    username: crkespqt3s2yars
+    password: <registry_password>
 
   ipAddress:
     type: Public
